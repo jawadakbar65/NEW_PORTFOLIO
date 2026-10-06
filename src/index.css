@@ -1,0 +1,8 @@
+/* Global stylesheet — organized into partials under src/styles/ */
+@import './styles/base.css';
+@import './styles/navbar.css';
+@import './styles/hero.css';
+@import './styles/about-skills.css';
+@import './styles/projects-blog.css';
+@import './styles/contact-footer.css';
+@import './styles/responsive.css';
