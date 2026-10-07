@@ -8,9 +8,14 @@ import {
   SiGit,
   SiGithub,
   SiNpm,
+  SiTailwindcss,
+  SiPostman,
+  SiMongodb,
+  SiFirebase,
+  SiJsonwebtokens,
 } from 'react-icons/si';
 import { VscVscode } from 'react-icons/vsc';
-import { FiMonitor, FiServer, FiTool, FiCode } from 'react-icons/fi';
+import { FiMonitor, FiServer, FiTool, FiCode, FiDatabase } from 'react-icons/fi';
 
 /* ------------------------------------------------------------------ */
 /*  CENTRAL CONFIG — edit this file to update your whole portfolio.    */
@@ -35,7 +40,7 @@ export const profile = {
   portraitSize: { width: 1254, height: 1254 },
   // Your live CV / resume (opens in a new tab).
   cvUrl: 'https://jawadakbar65.github.io/Jawad-Resume/',
-  email: 'jawadbaloch.hub3545524@gmail.com',
+  email: 'jawad.dev@gmail.com',
   location: 'Available for remote work',
   github: 'https://github.com/jawadakbar65',
   linkedin: 'https://www.linkedin.com/in/jawad-akbar-b9615b383/',
@@ -83,17 +88,22 @@ export const skillCategories = [
       { name: 'CSS3', Icon: SiCss, color: '#1572B6' },
       { name: 'JavaScript', Icon: SiJavascript, color: '#F7DF1E' },
       { name: 'React.js', Icon: SiReact, color: '#61DAFB' },
+      { name: 'Tailwind CSS', Icon: SiTailwindcss, color: '#06B6D4' },
       { name: 'Responsive Web Design', Icon: FiCode, color: '#8528F5' },
     ],
   },
   {
     id: 'backend',
-    title: 'Backend',
+    title: 'Backend/Database',
     Icon: FiServer,
     skills: [
       { name: 'Node.js', Icon: SiNodedotjs, color: '#5FA04E' },
       { name: 'Express.js', Icon: SiExpress, color: '#3C3C43' },
       { name: 'REST APIs', Icon: FiServer, color: '#8528F5' },
+      { name: 'Postman', Icon: SiPostman, color: '#FF6C37' },
+      { name: 'MongoDB', Icon: SiMongodb, color: '#47A248' },
+      { name: 'Firebase', Icon: SiFirebase, color: '#FFCA28' },
+      { name: 'Database Design', Icon: FiDatabase, color: '#1572B6' },
     ],
   },
   {
@@ -103,8 +113,10 @@ export const skillCategories = [
     skills: [
       { name: 'Git', Icon: SiGit, color: '#F05032' },
       { name: 'GitHub', Icon: SiGithub, color: '#181717' },
+      { name: 'Git Desktop', Icon: FiMonitor, color: '#4078C0' },
       { name: 'VS Code', Icon: VscVscode, color: '#007ACC' },
       { name: 'npm', Icon: SiNpm, color: '#CB3837' },
+      { name: 'JWT', Icon: SiJsonwebtokens, color: '#000000' },
     ],
   },
 ];
@@ -132,7 +144,7 @@ export const projects = [
       'A school management system for handling students, classes and records through a clean, easy-to-use interface.',
     tech: ['HTML5', 'CSS3', 'JavaScript'],
     thumbnail: null,
-    liveUrl: '#',
+    liveUrl: '',
     codeUrl: 'https://github.com/jawadakbar65',
   },
   {
@@ -192,9 +204,6 @@ export const contactContent = {
   heading: "Let's Work Together",
   invitation:
     'Have a project in mind, a role to fill, or an idea worth building? Send me a message and I will get back to you as soon as I can.',
-  // Shown to visitors under the form — keep this honest.
-  formNote:
-    'This form validates your message and sends it straight to my inbox — a copy is also kept in Firebase. Your details are only used to reply to you.',
 };
 
 export default {

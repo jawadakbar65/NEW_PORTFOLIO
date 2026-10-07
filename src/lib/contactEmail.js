@@ -5,7 +5,7 @@ import { profile } from '../data/portfolioData.js';
  *
  * Sign up at https://dashboard.emailjs.com → Email Services (connect Gmail)
  * → Email Templates → then paste the three values below.
- * Until they are filled in, the form falls back to saving into Firestore only.
+ * Until they are filled in, the form offers a prefilled mailto link instead.
  */
 export const EMAILJS_CONFIG = {
   serviceId: 'service_REPLACE_ME',

@@ -1,11 +1,9 @@
 import { FiGithub, FiLinkedin, FiMail, FiArrowUp } from 'react-icons/fi';
-import { FaWhatsapp } from 'react-icons/fa';
 import { profile, socials } from '../data/portfolioData.js';
 
 const socialIcons = {
   github: FiGithub,
   linkedin: FiLinkedin,
-  whatsapp: FaWhatsapp,
   mail: FiMail,
 };
 
@@ -26,21 +24,10 @@ function Footer() {
           </p>
         </div>
 
-        <nav className="footer__nav" aria-label="Footer navigation">
-          <h3>Explore</h3>
-          <ul>
-            {profile.navLinks.map((link) => (
-              <li key={link.label}>
-                <a href={link.href}>{link.label}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
         <div className="footer__connect">
           <h3>Connect</h3>
           <ul className="footer__socials">
-            {socials.map(({ id, label, url }) => {
+            {socials.filter(({ id }) => id !== 'whatsapp').map(({ id, label, url }) => {
               const Icon = socialIcons[id] ?? FiMail;
               return (
                 <li key={id}>

@@ -1,41 +1,24 @@
 import { useState } from 'react';
-import { FiMail, FiMapPin, FiSend, FiGithub, FiLinkedin, FiPhone } from 'react-icons/fi';
+import { FiMail, FiMapPin, FiSend, FiGithub, FiLinkedin } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { contactContent, profile, socials } from '../data/portfolioData.js';
 import { isEmailConfigured, sendContactEmail } from '../lib/contactEmail.js';
-import { notifyOwner } from '../lib/notify.js';
 
 const socialIcons = {
   github: FiGithub,
   linkedin: FiLinkedin,
-  whatsapp: FaWhatsapp,
   mail: FiMail,
 };
 
 const initialForm = { name: '', email: '', subject: '', message: '' };
 
-/* Firebase can stall (API disabled, offline) — never leave the visitor
-   staring at "Sending…" forever. */
+/* Never leave the visitor staring at "Sending…" forever. */
 function withTimeout(promise, ms = 15000) {
   let timer;
   const timeout = new Promise((_, reject) => {
     timer = setTimeout(() => reject(new Error('firebase-timeout')), ms);
   });
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
-}
-
-/* Firebase is imported lazily so the SDK never weighs down first paint. */
-async function saveToFirebase(payload) {
-  const [{ addDoc, collection, serverTimestamp }, { db }] = await Promise.all([
-    import('firebase/firestore'),
-    import('../lib/firebase.js'),
-  ]);
-
-  return addDoc(collection(db, 'messages'), {
-    ...payload,
-    createdAt: serverTimestamp(),
-    source: 'contact-form',
-  });
 }
 
 /* Last-resort delivery: open the visitor's mail app addressed to the owner. */
@@ -93,31 +76,17 @@ function Contact() {
       message: form.message.trim(),
     };
 
-    const byEmail = isEmailConfigured();
-
-    // Instant WhatsApp ping to the owner (0336 8026548) — never blocks the form.
-    notifyOwner(payload).then((result) => {
-      if (result?.error) console.error('WhatsApp notification failed:', result.error);
-    });
-
     try {
-      if (byEmail) {
-        // Email is the primary channel; the Firebase copy must never block it.
-        saveToFirebase(payload).catch((err) =>
-          console.error('Firestore copy failed:', err),
-        );
-        await withTimeout(sendContactEmail(payload), 20000);
-        setForm(initialForm);
-        setFallbackHref('');
-        setStatus('Thanks! Your message has been sent to my inbox — I will get back to you soon.');
-      } else {
-        // No EmailJS keys yet: save to Firebase, and only fall back to the
-        // visitor's mail app if that save fails or stalls.
-        await withTimeout(saveToFirebase(payload), 8000);
-        setForm(initialForm);
-        setFallbackHref('');
-        setStatus('Thanks! Your message has been saved — I will get back to you soon.');
+      if (!isEmailConfigured()) {
+        setFallbackHref(mailtoHref(payload));
+        setStatus('Email delivery is not configured yet. Open your email app below to send your message.');
+        return;
       }
+
+      await withTimeout(sendContactEmail(payload), 20000);
+      setForm(initialForm);
+      setFallbackHref('');
+      setStatus('Thanks! Your message has been sent to my inbox — I will get back to you soon.');
     } catch (err) {
       console.error('Contact form submit failed:', err);
       setFallbackHref(mailtoHref(payload));
@@ -161,12 +130,12 @@ function Contact() {
             </li>
             <li>
               <span className="contact__icon">
-                <FiPhone aria-hidden="true" />
+                <FaWhatsapp aria-hidden="true" />
               </span>
               <div>
                 <span className="contact__label">WhatsApp</span>
-                <a href={profile.whatsappUrl} target="_blank" rel="noreferrer noopener">
-                  {profile.whatsappLabel}
+                <a href={profile.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                  03368026548
                 </a>
               </div>
             </li>
@@ -182,17 +151,8 @@ function Contact() {
           </ul>
 
           <div className="contact__cta-row">
-            <a
-              className="btn btn--whatsapp"
-              href={profile.whatsappChatUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaWhatsapp aria-hidden="true" />
-              Chat on WhatsApp
-            </a>
             <ul className="contact__socials" aria-label="Social media links">
-              {socials.map(({ id, label, url }) => {
+              {socials.filter(({ id }) => id !== 'whatsapp').map(({ id, label, url }) => {
                 const Icon = socialIcons[id] ?? FiMail;
                 return (
                   <li key={id}>
@@ -229,7 +189,7 @@ function Contact() {
               <input
                 type="email"
                 autoComplete="email"
-                placeholder="you@example.com"
+                placeholder="jawad@gmail.com"
                 {...fieldProps('email')}
               />
               {errors.email && (
@@ -274,7 +234,6 @@ function Contact() {
             {sending ? 'Sending…' : 'Send Message'}
           </button>
 
-          <p className="contact__note">{contactContent.formNote}</p>
           {status && (
             <p className="contact__status" role="status" aria-live="polite">
               {status}{' '}
