@@ -143,3 +143,125 @@
   font-size: 0.95rem;
   color: var(--heading);
 }
+
+/* ---------- CV action buttons + viewer modal ---------- */
+.about__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.cv-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  background: rgba(17, 17, 17, 0.72);
+  backdrop-filter: blur(4px);
+  animation: cv-fade 0.2s ease;
+}
+
+.cv-modal__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 940px);
+  height: min(90vh, 900px);
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  animation: cv-pop 0.25s ease;
+}
+
+.cv-modal__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.cv-modal__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--heading);
+}
+
+.cv-modal__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cv-modal__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--purple);
+  text-decoration: none;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.cv-modal__open:hover {
+  background: var(--purple-soft);
+  border-color: var(--purple);
+}
+
+.cv-modal__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--bg-card);
+  color: var(--heading);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.cv-modal__close:hover {
+  background: var(--heading);
+  color: #ffffff;
+}
+
+.cv-modal__frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #ffffff;
+}
+
+@keyframes cv-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cv-pop {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

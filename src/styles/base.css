@@ -206,17 +206,18 @@ textarea {
 }
 
 .btn--whatsapp {
-  background: var(--whatsapp);
-  border-color: var(--whatsapp);
-  color: #ffffff;
-  box-shadow: 0 14px 30px rgba(37, 211, 102, 0.28);
+  background: #ffffff;
+  border-color: #000000;
+  color: var(--heading);
+  box-shadow: 0 14px 30px rgba(65, 65, 65, 0.14);
 }
 
 .btn--whatsapp:hover {
-  background: var(--whatsapp-strong);
-  border-color: var(--whatsapp-strong);
+  background: #ffffff;
+  border-color: #000000;
+  color: var(--heading);
   transform: translateY(-3px);
-  box-shadow: 0 20px 38px rgba(37, 211, 102, 0.34);
+  box-shadow: 0 20px 38px rgba(65, 65, 65, 0.2);
 }
 
 .btn--primary:active,

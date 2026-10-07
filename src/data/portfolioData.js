@@ -33,9 +33,9 @@ export const profile = {
   portrait: 'images/portrait.png',
   portraitAlt: 'Portrait of Jawad Akbar, Frontend Developer',
   portraitSize: { width: 1254, height: 1254 },
-  // Put your CV in public/cv.pdf
-  cvUrl: 'cv.pdf',
-  email: 'jawad.baloch.dev@gmail.com',
+  // Your live CV / resume (opens in a new tab).
+  cvUrl: 'https://jawadakbar65.github.io/Jawad-Resume/',
+  email: 'jawadbaloch.hub3545524@gmail.com',
   location: 'Available for remote work',
   github: 'https://github.com/jawadakbar65',
   linkedin: 'https://www.linkedin.com/in/jawad-akbar-b9615b383/',
@@ -112,53 +112,45 @@ export const skillCategories = [
 /* Add / edit / remove projects here. Set `thumbnail` to an image path
    inside public/images/ (e.g. 'images/projects/food.webp').
    Leave it null to use the built-in placeholder artwork. */
+/* 4 projects. Paste the live URL into `liveUrl` once you send the links
+   for School Management System, Restaurant and E-commerce. */
 export const projects = [
   {
-    id: 'portfolio',
-    title: 'Personal Portfolio Website',
+    id: 'hardware-shop',
+    title: 'Hardware Shop',
     description:
-      'A clean, responsive developer portfolio with a two-column hero, project gallery and contact section.',
-    tech: ['React.js', 'CSS3', 'Vite'],
+      'An offline-friendly hardware shop website with product listings, categories and a responsive layout that works smoothly on any device.',
+    tech: ['HTML5', 'CSS3', 'JavaScript'],
     thumbnail: null,
-    liveUrl: '#',
+    liveUrl: 'https://jawadakbar65.github.io/Offline_Hardware',
     codeUrl: 'https://github.com/jawadakbar65',
   },
   {
-    id: 'food',
-    title: 'Food Website',
+    id: 'school-management-system',
+    title: 'School Management System',
     description:
-      'A modern food front page with menu highlights, responsive dish grids and smooth hover interactions.',
+      'A school management system for handling students, classes and records through a clean, easy-to-use interface.',
     tech: ['HTML5', 'CSS3', 'JavaScript'],
     thumbnail: null,
     liveUrl: '#',
     codeUrl: 'https://github.com/jawadakbar65',
   },
   {
-    id: 'woodworking',
-    title: 'Woodworking Website',
+    id: 'restaurant',
+    title: 'Restaurant',
     description:
-      'A craft-focused showcase site for a woodworking studio with gallery layouts and clean typography.',
+      'A restaurant website with a menu showcase, gallery and reservation contact section, fully responsive across screen sizes.',
     tech: ['HTML5', 'CSS3', 'JavaScript'],
     thumbnail: null,
     liveUrl: '#',
     codeUrl: 'https://github.com/jawadakbar65',
   },
   {
-    id: 'react-app',
-    title: 'React.js Web Application',
+    id: 'e-commerce',
+    title: 'E-commerce',
     description:
-      'A component-driven single-page application with reusable UI, local state and route-based navigation.',
-    tech: ['React.js', 'JavaScript', 'CSS3'],
-    thumbnail: null,
-    liveUrl: '#',
-    codeUrl: 'https://github.com/jawadakbar65',
-  },
-  {
-    id: 'fullstack',
-    title: 'Full-Stack JavaScript Application',
-    description:
-      'A full-stack app with a REST API built on Node.js and Express.js and a React frontend consuming it.',
-    tech: ['React.js', 'Node.js', 'Express.js'],
+      'An e-commerce storefront with product grids, filtering and a cart flow, built for a smooth desktop and mobile shopping experience.',
+    tech: ['HTML5', 'CSS3', 'JavaScript'],
     thumbnail: null,
     liveUrl: '#',
     codeUrl: 'https://github.com/jawadakbar65',
@@ -202,7 +194,7 @@ export const contactContent = {
     'Have a project in mind, a role to fill, or an idea worth building? Send me a message and I will get back to you as soon as I can.',
   // Shown to visitors under the form — keep this honest.
   formNote:
-    'This form validates your message locally and opens your email app to send it. No data is stored on a server.',
+    'This form validates your message and sends it straight to my inbox — a copy is also kept in Firebase. Your details are only used to reply to you.',
 };
 
 export default {

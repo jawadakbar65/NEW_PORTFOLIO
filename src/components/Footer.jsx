@@ -1,4 +1,4 @@
-import { FiGithub, FiLinkedin, FiMail, FiHeart, FiArrowUp } from 'react-icons/fi';
+import { FiGithub, FiLinkedin, FiMail, FiArrowUp } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { profile, socials } from '../data/portfolioData.js';
 
@@ -58,11 +58,8 @@ function Footer() {
       </div>
 
       <div className="container footer__bottom">
-        <p>
+        <p className="footer__copy">
           © {year} {profile.name}. All rights reserved.
-        </p>
-        <p className="footer__made">
-          Built with <FiHeart aria-hidden="true" /> React + Vite
         </p>
         <a className="footer__top" href="#home" aria-label="Back to top">
           <FiArrowUp aria-hidden="true" />

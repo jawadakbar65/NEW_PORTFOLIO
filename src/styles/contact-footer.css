@@ -261,29 +261,42 @@
   color: var(--purple);
 }
 
+.contact__status-link {
+  display: inline-block;
+  margin-left: 0.35rem;
+  font-weight: 600;
+  color: var(--purple);
+  text-decoration: underline;
+}
+
+.contact__status-link:hover {
+  color: var(--purple-strong);
+}
+
+/* copyright centred on every width; back-to-top pinned to the right */
 .footer__bottom {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
-  flex-wrap: wrap;
   padding: 1.4rem 0;
   border-top: 1px solid var(--border);
   color: var(--muted-2);
   font-size: 0.87rem;
 }
 
-.footer__made {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.footer__made svg {
-  color: var(--purple);
+.footer__copy {
+  margin: 0;
+  text-align: center;
 }
 
 .footer__top {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin-block: auto;
   display: grid;
   place-items: center;
   width: 40px;

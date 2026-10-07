@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { FiMail, FiMapPin, FiSend, FiGithub, FiLinkedin, FiPhone } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { contactContent, profile, socials } from '../data/portfolioData.js';
+import { isEmailConfigured, sendContactEmail } from '../lib/contactEmail.js';
+import { notifyOwner } from '../lib/notify.js';
 
 const socialIcons = {
   github: FiGithub,
@@ -11,6 +13,37 @@ const socialIcons = {
 };
 
 const initialForm = { name: '', email: '', subject: '', message: '' };
+
+/* Firebase can stall (API disabled, offline) — never leave the visitor
+   staring at "Sending…" forever. */
+function withTimeout(promise, ms = 15000) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error('firebase-timeout')), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+/* Firebase is imported lazily so the SDK never weighs down first paint. */
+async function saveToFirebase(payload) {
+  const [{ addDoc, collection, serverTimestamp }, { db }] = await Promise.all([
+    import('firebase/firestore'),
+    import('../lib/firebase.js'),
+  ]);
+
+  return addDoc(collection(db, 'messages'), {
+    ...payload,
+    createdAt: serverTimestamp(),
+    source: 'contact-form',
+  });
+}
+
+/* Last-resort delivery: open the visitor's mail app addressed to the owner. */
+function mailtoHref({ name, email, subject, message }) {
+  const subjectEncoded = encodeURIComponent(subject);
+  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+  return `mailto:${profile.email}?subject=${subjectEncoded}&body=${body}`;
+}
 
 function validate(form) {
   const errors = {};
@@ -31,6 +64,8 @@ function Contact() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('');
+  const [sending, setSending] = useState(false);
+  const [fallbackHref, setFallbackHref] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,7 +73,7 @@ function Contact() {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const found = validate(form);
     setErrors(found);
@@ -48,12 +83,50 @@ function Contact() {
       return;
     }
 
-    const subject = encodeURIComponent(form.subject.trim());
-    const body = encodeURIComponent(
-      `Name: ${form.name.trim()}\nEmail: ${form.email.trim()}\n\n${form.message.trim()}`
-    );
-    setStatus('Opening your email app to send the message…');
-    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
+    setSending(true);
+    setStatus('Sending your message…');
+
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      subject: form.subject.trim(),
+      message: form.message.trim(),
+    };
+
+    const byEmail = isEmailConfigured();
+
+    // Instant WhatsApp ping to the owner (0336 8026548) — never blocks the form.
+    notifyOwner(payload).then((result) => {
+      if (result?.error) console.error('WhatsApp notification failed:', result.error);
+    });
+
+    try {
+      if (byEmail) {
+        // Email is the primary channel; the Firebase copy must never block it.
+        saveToFirebase(payload).catch((err) =>
+          console.error('Firestore copy failed:', err),
+        );
+        await withTimeout(sendContactEmail(payload), 20000);
+        setForm(initialForm);
+        setFallbackHref('');
+        setStatus('Thanks! Your message has been sent to my inbox — I will get back to you soon.');
+      } else {
+        // No EmailJS keys yet: save to Firebase, and only fall back to the
+        // visitor's mail app if that save fails or stalls.
+        await withTimeout(saveToFirebase(payload), 8000);
+        setForm(initialForm);
+        setFallbackHref('');
+        setStatus('Thanks! Your message has been saved — I will get back to you soon.');
+      }
+    } catch (err) {
+      console.error('Contact form submit failed:', err);
+      setFallbackHref(mailtoHref(payload));
+      setStatus(
+        `Automatic delivery is unavailable right now. Open your email app below — the message is pre-filled, just press Send (or write to ${profile.email}).`,
+      );
+    } finally {
+      setSending(false);
+    }
   };
 
   const fieldProps = (name) => ({
@@ -191,15 +264,25 @@ function Contact() {
             )}
           </div>
 
-          <button type="submit" className="btn btn--primary contact__submit">
+          <button
+            type="submit"
+            className="btn btn--primary contact__submit"
+            disabled={sending}
+            aria-busy={sending}
+          >
             <FiSend aria-hidden="true" />
-            Send Message
+            {sending ? 'Sending…' : 'Send Message'}
           </button>
 
           <p className="contact__note">{contactContent.formNote}</p>
           {status && (
             <p className="contact__status" role="status" aria-live="polite">
-              {status}
+              {status}{' '}
+              {fallbackHref && (
+                <a className="contact__status-link" href={fallbackHref}>
+                  Open my email app →
+                </a>
+              )}
             </p>
           )}
         </form>
